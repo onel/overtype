@@ -10,11 +10,31 @@ var OverType = (() => {
   var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
   var __getOwnPropNames = Object.getOwnPropertyNames;
   var __hasOwnProp = Object.prototype.hasOwnProperty;
+  /**
+   * Define a normal property on an object
+   * @param {Object} obj - Target object
+   * @param {string} key - Property key
+   * @param {*} value - Property value
+   * @returns {*} The value that was set
+   */
   var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+  /**
+   * Export properties to a target object
+   * @param {Object} target - Target object to export to
+   * @param {Object} all - Object containing properties to export
+   */
   var __export = (target, all) => {
     for (var name in all)
       __defProp(target, name, { get: all[name], enumerable: true });
   };
+  /**
+   * Copy properties from one object to another
+   * @param {Object} to - Target object
+   * @param {Object} from - Source object
+   * @param {string} except - Property to exclude
+   * @param {Object} desc - Property descriptor
+   * @returns {Object} The target object
+   */
   var __copyProps = (to, from, except, desc) => {
     if (from && typeof from === "object" || typeof from === "function") {
       for (let key of __getOwnPropNames(from))
@@ -23,7 +43,19 @@ var OverType = (() => {
     }
     return to;
   };
+  /**
+   * Convert module to CommonJS format
+   * @param {Object} mod - Module to convert
+   * @returns {Object} CommonJS module
+   */
   var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+  /**
+   * Define a public field on an object
+   * @param {Object} obj - Target object
+   * @param {string|symbol} key - Property key
+   * @param {*} value - Property value
+   * @returns {*} The value that was set
+   */
   var __publicField = (obj, key, value) => {
     __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
     return value;
@@ -37,6 +69,9 @@ var OverType = (() => {
   });
 
   // src/parser.js
+  /**
+   * Markdown parser class for converting markdown text to HTML with syntax highlighting
+   */
   var MarkdownParser = class {
     /**
      * Reset link index (call before parsing a new document)
@@ -183,7 +218,7 @@ var OverType = (() => {
     static parseInlineElements(text) {
       let html = text;
       html = this.parseInlineCode(html);
-      const codeBlocks = /* @__PURE__ */ new Map();
+      const codeBlocks = new Map();
       html = html.replace(/(<code>.*?<\/code>)/g, (match) => {
         const placeholder = `\uE000${codeBlocks.size}\uE001`;
         codeBlocks.set(placeholder, match);
@@ -249,7 +284,20 @@ var OverType = (() => {
   var __getOwnPropSymbols = Object.getOwnPropertySymbols;
   var __hasOwnProp2 = Object.prototype.hasOwnProperty;
   var __propIsEnum = Object.prototype.propertyIsEnumerable;
+  /**
+   * Define a normal property with enumerable check
+   * @param {Object} obj - Target object
+   * @param {string} key - Property key
+   * @param {*} value - Property value
+   * @returns {*} The value that was set
+   */
   var __defNormalProp2 = (obj, key, value) => key in obj ? __defProp2(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+  /**
+   * Spread values from one object to another
+   * @param {Object} a - Target object
+   * @param {Object} b - Source object
+   * @returns {Object} Combined object
+   */
   var __spreadValues = (a, b) => {
     for (var prop in b || (b = {}))
       if (__hasOwnProp2.call(b, prop))
@@ -261,6 +309,9 @@ var OverType = (() => {
       }
     return a;
   };
+  /**
+   * Markdown formatting configurations
+   */
   var FORMATS = {
     bold: {
       prefix: "**",
@@ -311,6 +362,10 @@ var OverType = (() => {
     header5: { prefix: "##### " },
     header6: { prefix: "###### " }
   };
+  /**
+   * Get default style configuration
+   * @returns {Object} Default style object
+   */
   function getDefaultStyle() {
     return {
       prefix: "",
@@ -327,28 +382,50 @@ var OverType = (() => {
       trimFirst: false
     };
   }
+  /**
+   * Merge format configuration with defaults
+   * @param {Object} format - Format configuration to merge
+   * @returns {Object} Merged configuration
+   */
   function mergeWithDefaults(format) {
     return __spreadValues(__spreadValues({}, getDefaultStyle()), format);
   }
   var debugMode = false;
+  /**
+   * Get current debug mode state
+   * @returns {boolean} Debug mode enabled
+   */
   function getDebugMode() {
     return debugMode;
   }
+  /**
+   * Log debug information if debug mode is enabled
+   * @param {string} funcName - Function name for grouping
+   * @param {string} message - Debug message
+   * @param {*} data - Optional data to log
+   * @returns {void}
+   */
   function debugLog(funcName, message, data) {
     if (!debugMode)
       return;
-    console.group(`\u{1F50D} ${funcName}`);
+    console.group(`🔍 ${funcName}`);
     console.log(message);
     if (data) {
       console.log("Data:", data);
     }
     console.groupEnd();
   }
+  /**
+   * Debug textarea selection information
+   * @param {HTMLTextAreaElement} textarea - Textarea element
+   * @param {string} label - Label for the debug output
+   * @returns {void}
+   */
   function debugSelection(textarea, label) {
     if (!debugMode)
       return;
     const selected = textarea.value.slice(textarea.selectionStart, textarea.selectionEnd);
-    console.group(`\u{1F4CD} Selection: ${label}`);
+    console.group(`📍 Selection: ${label}`);
     console.log("Position:", `${textarea.selectionStart}-${textarea.selectionEnd}`);
     console.log("Selected text:", JSON.stringify(selected));
     console.log("Length:", selected.length);
@@ -357,19 +434,29 @@ var OverType = (() => {
     console.log("Context:", JSON.stringify(before) + "[SELECTION]" + JSON.stringify(after));
     console.groupEnd();
   }
+  /**
+   * Debug operation result
+   * @param {Object} result - Result object with text and selection info
+   * @returns {void}
+   */
   function debugResult(result) {
     if (!debugMode)
       return;
-    console.group("\u{1F4DD} Result");
+    console.group("📝 Result");
     console.log("Text to insert:", JSON.stringify(result.text));
     console.log("New selection:", `${result.selectionStart}-${result.selectionEnd}`);
     console.groupEnd();
   }
   var canInsertText = null;
+  /**
+   * Insert text into textarea with proper selection handling
+   * @param {HTMLTextAreaElement} textarea - Target textarea
+   * @param {Object} options - Insert options with text and selection positions
+   */
   function insertText(textarea, { text, selectionStart, selectionEnd }) {
     const debugMode2 = getDebugMode();
     if (debugMode2) {
-      console.group("\u{1F527} insertText");
+      console.group("🔧 insertText");
       console.log("Current selection:", `${textarea.selectionStart}-${textarea.selectionEnd}`);
       console.log("Text to insert:", JSON.stringify(text));
       console.log("New selection to set:", selectionStart, "-", selectionEnd);
@@ -451,9 +538,20 @@ var OverType = (() => {
       console.groupEnd();
     }
   }
+  /**
+   * Check if string contains multiple lines
+   * @param {string} string - String to check
+   * @returns {boolean} True if string has multiple lines
+   */
   function isMultipleLines(string) {
     return string.trim().split("\n").length > 1;
   }
+  /**
+   * Find word selection start position
+   * @param {string} text - Text to search in
+   * @param {number} i - Starting position
+   * @returns {number} Word start position
+   */
   function wordSelectionStart(text, i) {
     let index = i;
     while (text[index] && text[index - 1] != null && !text[index - 1].match(/\s/)) {
@@ -461,6 +559,13 @@ var OverType = (() => {
     }
     return index;
   }
+  /**
+   * Find word selection end position
+   * @param {string} text - Text to search in
+   * @param {number} i - Starting position
+   * @param {boolean} multiline - Whether to break on newlines
+   * @returns {number} Word end position
+   */
   function wordSelectionEnd(text, i, multiline) {
     let index = i;
     const breakpoint = multiline ? /\n/ : /\s/;
@@ -469,6 +574,10 @@ var OverType = (() => {
     }
     return index;
   }
+  /**
+   * Expand selection to encompass full lines
+   * @param {HTMLTextAreaElement} textarea - Target textarea
+   */
   function expandSelectionToLine(textarea) {
     const lines = textarea.value.split("\n");
     let counter = 0;
@@ -487,6 +596,14 @@ var OverType = (() => {
       counter += lineLength;
     }
   }
+  /**
+   * Expand selected text to include surrounding formatting
+   * @param {HTMLTextAreaElement} textarea - Target textarea
+   * @param {string} prefixToUse - Prefix to look for
+   * @param {string} suffixToUse - Suffix to look for
+   * @param {boolean} multiline - Whether selection can span multiple lines
+   * @returns {string} Expanded selected text
+   */
   function expandSelectedText(textarea, prefixToUse, suffixToUse, multiline = false) {
     if (textarea.selectionStart === textarea.selectionEnd) {
       textarea.selectionStart = wordSelectionStart(textarea.value, textarea.selectionStart);
@@ -503,6 +620,11 @@ var OverType = (() => {
     }
     return textarea.value.slice(textarea.selectionStart, textarea.selectionEnd);
   }
+  /**
+   * Calculate newlines needed to surround selected text
+   * @param {HTMLTextAreaElement} textarea - Target textarea
+   * @returns {Object} Object with newlinesToAppend and newlinesToPrepend
+   */
   function newlinesToSurroundSelectedText(textarea) {
     const beforeSelection = textarea.value.slice(0, textarea.selectionStart);
     const afterSelection = textarea.value.slice(textarea.selectionEnd);
@@ -520,6 +642,13 @@ var OverType = (() => {
     }
     return { newlinesToAppend, newlinesToPrepend };
   }
+  /**
+   * Apply line-based operation to textarea
+   * @param {HTMLTextAreaElement} textarea - Target textarea
+   * @param {Function} operation - Operation to apply
+   * @param {Object} options - Operation options
+   * @returns {Object} Operation result
+   */
   function applyLineOperation(textarea, operation, options = {}) {
     const originalStart = textarea.selectionStart;
     const originalEnd = textarea.selectionEnd;
@@ -569,6 +698,12 @@ var OverType = (() => {
     }
     return result;
   }
+  /**
+   * Apply block-style formatting to selected text
+   * @param {HTMLTextAreaElement} textarea - Target textarea
+   * @param {Object} style - Style configuration
+   * @returns {Object} Formatting result with text and selection positions
+   */
   function blockStyle(textarea, style) {
     let newlinesToAppend;
     let newlinesToPrepend;
@@ -576,10 +711,8 @@ var OverType = (() => {
     const originalSelectionStart = textarea.selectionStart;
     const originalSelectionEnd = textarea.selectionEnd;
     let selectedText = textarea.value.slice(textarea.selectionStart, textarea.selectionEnd);
-    let prefixToUse = isMultipleLines(selectedText) && blockPrefix && blockPrefix.length > 0 ? `${blockPrefix}
-` : prefix;
-    let suffixToUse = isMultipleLines(selectedText) && blockSuffix && blockSuffix.length > 0 ? `
-${blockSuffix}` : suffix;
+    let prefixToUse = isMultipleLines(selectedText) && blockPrefix && blockPrefix.length > 0 ? `${blockPrefix}\n` : prefix;
+    let suffixToUse = isMultipleLines(selectedText) && blockSuffix && blockSuffix.length > 0 ? `\n${blockSuffix}` : suffix;
     if (prefixSpace) {
       const beforeSelection = textarea.value[textarea.selectionStart - 1];
       if (textarea.selectionStart !== 0 && beforeSelection != null && !beforeSelection.match(/\s/)) {
@@ -633,6 +766,12 @@ ${blockSuffix}` : suffix;
       return { text: replacementText, selectionStart, selectionEnd };
     }
   }
+  /**
+   * Apply multiline style formatting
+   * @param {HTMLTextAreaElement} textarea - Target textarea
+   * @param {Object} style - Style configuration
+   * @returns {Object} Formatting result
+   */
   function multilineStyle(textarea, style) {
     const { prefix, suffix, surroundWithNewlines } = style;
     let text = textarea.value.slice(textarea.selectionStart, textarea.selectionEnd);
@@ -660,6 +799,11 @@ ${blockSuffix}` : suffix;
     }
     return { text, selectionStart, selectionEnd };
   }
+  /**
+   * Remove ordered list styling from text
+   * @param {string} text - Text to process
+   * @returns {Object} Result with processed text and whether processing occurred
+   */
   function undoOrderedListStyle(text) {
     const lines = text.split("\n");
     const orderedListRegex = /^\d+\.\s+/;
@@ -673,6 +817,11 @@ ${blockSuffix}` : suffix;
       processed: shouldUndoOrderedList
     };
   }
+  /**
+   * Remove unordered list styling from text
+   * @param {string} text - Text to process
+   * @returns {Object} Result with processed text and whether processing occurred
+   */
   function undoUnorderedListStyle(text) {
     const lines = text.split("\n");
     const unorderedListPrefix = "- ";
@@ -686,6 +835,12 @@ ${blockSuffix}` : suffix;
       processed: shouldUndoUnorderedList
     };
   }
+  /**
+   * Generate list prefix for given index and type
+   * @param {number} index - List item index
+   * @param {boolean} unorderedList - Whether this is an unordered list
+   * @returns {string} List prefix
+   */
   function makePrefix(index, unorderedList) {
     if (unorderedList) {
       return "- ";
@@ -693,6 +848,12 @@ ${blockSuffix}` : suffix;
       return `${index + 1}. `;
     }
   }
+  /**
+   * Clear existing list styling from selected text
+   * @param {Object} style - Style configuration
+   * @param {string} selectedText - Selected text to process
+   * @returns {Array} Array with undo results and pristine text
+   */
   function clearExistingListStyle(style, selectedText) {
     let undoResult;
     let undoResultOppositeList;
@@ -708,6 +869,12 @@ ${blockSuffix}` : suffix;
     }
     return [undoResult, undoResultOppositeList, pristineText];
   }
+  /**
+   * Apply list style formatting
+   * @param {HTMLTextAreaElement} textarea - Target textarea
+   * @param {Object} style - Style configuration
+   * @returns {Object} Formatting result
+   */
   function listStyle(textarea, style) {
     const noInitialSelection = textarea.selectionStart === textarea.selectionEnd;
     let selectionStart = textarea.selectionStart;
@@ -750,6 +917,12 @@ ${blockSuffix}` : suffix;
     }
     return { text, selectionStart, selectionEnd };
   }
+  /**
+   * Apply list style with proper line operation handling
+   * @param {HTMLTextAreaElement} textarea - Target textarea
+   * @param {Object} style - Style configuration
+   * @returns {void}
+   */
   function applyListStyle(textarea, style) {
     const result = applyLineOperation(
       textarea,
@@ -817,6 +990,11 @@ ${blockSuffix}` : suffix;
     );
     insertText(textarea, result);
   }
+  /**
+   * Get currently active formatting styles at cursor position
+   * @param {HTMLTextAreaElement} textarea - Target textarea
+   * @returns {Array} Array of active format names
+   */
   function getActiveFormats(textarea) {
     if (!textarea)
       return [];
@@ -893,6 +1071,11 @@ ${blockSuffix}` : suffix;
     }
     return formats;
   }
+  /**
+   * Toggle bold formatting on selected text
+   * @param {HTMLTextAreaElement} textarea - Target textarea
+   * @returns {void}
+   */
   function toggleBold(textarea) {
     if (!textarea || textarea.disabled || textarea.readOnly)
       return;
@@ -904,6 +1087,11 @@ ${blockSuffix}` : suffix;
     insertText(textarea, result);
     debugSelection(textarea, "After");
   }
+  /**
+   * Toggle italic formatting on selected text
+   * @param {HTMLTextAreaElement} textarea - Target textarea
+   * @returns {void}
+   */
   function toggleItalic(textarea) {
     if (!textarea || textarea.disabled || textarea.readOnly)
       return;
@@ -911,6 +1099,11 @@ ${blockSuffix}` : suffix;
     const result = blockStyle(textarea, style);
     insertText(textarea, result);
   }
+  /**
+   * Toggle code formatting on selected text
+   * @param {HTMLTextAreaElement} textarea - Target textarea
+   * @returns {void}
+   */
   function toggleCode(textarea) {
     if (!textarea || textarea.disabled || textarea.readOnly)
       return;
@@ -918,6 +1111,12 @@ ${blockSuffix}` : suffix;
     const result = blockStyle(textarea, style);
     insertText(textarea, result);
   }
+  /**
+   * Insert or toggle link formatting
+   * @param {HTMLTextAreaElement} textarea - Target textarea
+   * @param {Object} options - Link options with url and text properties
+   * @returns {void}
+   */
   function insertLink(textarea, options = {}) {
     if (!textarea || textarea.disabled || textarea.readOnly)
       return;
@@ -940,18 +1139,33 @@ ${blockSuffix}` : suffix;
     const result = blockStyle(textarea, style);
     insertText(textarea, result);
   }
+  /**
+   * Toggle bullet list formatting
+   * @param {HTMLTextAreaElement} textarea - Target textarea
+   * @returns {void}
+   */
   function toggleBulletList(textarea) {
     if (!textarea || textarea.disabled || textarea.readOnly)
       return;
     const style = mergeWithDefaults(FORMATS.bulletList);
     applyListStyle(textarea, style);
   }
+  /**
+   * Toggle numbered list formatting
+   * @param {HTMLTextAreaElement} textarea - Target textarea
+   * @returns {void}
+   */
   function toggleNumberedList(textarea) {
     if (!textarea || textarea.disabled || textarea.readOnly)
       return;
     const style = mergeWithDefaults(FORMATS.numberedList);
     applyListStyle(textarea, style);
   }
+  /**
+   * Toggle quote formatting
+   * @param {HTMLTextAreaElement} textarea - Target textarea
+   * @returns {void}
+   */
   function toggleQuote(textarea) {
     if (!textarea || textarea.disabled || textarea.readOnly)
       return;
@@ -967,6 +1181,11 @@ ${blockSuffix}` : suffix;
     insertText(textarea, result);
     debugSelection(textarea, "Final");
   }
+  /**
+   * Toggle task list formatting
+   * @param {HTMLTextAreaElement} textarea - Target textarea
+   * @returns {void}
+   */
   function toggleTaskList(textarea) {
     if (!textarea || textarea.disabled || textarea.readOnly)
       return;
@@ -978,6 +1197,13 @@ ${blockSuffix}` : suffix;
     );
     insertText(textarea, result);
   }
+  /**
+   * Insert header with specified level
+   * @param {HTMLTextAreaElement} textarea - Target textarea
+   * @param {number} level - Header level (1-6)
+   * @param {boolean} toggle - Whether to toggle header off if already present
+   * @returns {void}
+   */
   function insertHeader(textarea, level = 1, toggle = false) {
     if (!textarea || textarea.disabled || textarea.readOnly)
       return;
@@ -1074,21 +1300,45 @@ ${blockSuffix}` : suffix;
     debugLog("insertHeader", `============ END ============`);
     insertText(textarea, result);
   }
+  /**
+   * Toggle H1 header formatting
+   * @param {HTMLTextAreaElement} textarea - Target textarea
+   */
   function toggleH1(textarea) {
     insertHeader(textarea, 1, true);
   }
+  /**
+   * Toggle H2 header formatting
+   * @param {HTMLTextAreaElement} textarea - Target textarea
+   */
   function toggleH2(textarea) {
     insertHeader(textarea, 2, true);
   }
+  /**
+   * Toggle H3 header formatting
+   * @param {HTMLTextAreaElement} textarea - Target textarea
+   */
   function toggleH3(textarea) {
     insertHeader(textarea, 3, true);
   }
+  /**
+   * Get active formats at current cursor position (alias for getActiveFormats)
+   * @param {HTMLTextAreaElement} textarea - Target textarea
+   * @returns {Array} Array of active format names
+   */
   function getActiveFormats2(textarea) {
     return getActiveFormats(textarea);
   }
 
   // src/shortcuts.js
+  /**
+   * Keyboard shortcuts manager for markdown editor
+   */
   var ShortcutsManager = class {
+    /**
+     * Create shortcuts manager
+     * @param {Object} editor - OverType editor instance
+     */
     constructor(editor) {
       this.editor = editor;
       this.textarea = editor.textarea;
@@ -1145,6 +1395,8 @@ ${blockSuffix}` : suffix;
     /**
      * Handle action - fallback when no toolbar exists
      * This duplicates toolbar.handleAction for consistency
+     * @param {string} action - Action name to execute
+     * @returns {Promise<void>}
      */
     async handleAction(action) {
       const textarea = this.textarea;
@@ -1175,13 +1427,16 @@ ${blockSuffix}` : suffix;
       }
     }
     /**
-     * Cleanup
+     * Cleanup resources
      */
     destroy() {
     }
   };
 
   // src/themes.js
+  /**
+   * Solar theme configuration (light theme)
+   */
   var solar = {
     name: "solar",
     colors: {
@@ -1232,6 +1487,9 @@ ${blockSuffix}` : suffix;
       // Lemon Chiffon - active button background
     }
   };
+  /**
+   * Cave theme configuration (dark theme)
+   */
   var cave = {
     name: "cave",
     colors: {
@@ -1282,6 +1540,9 @@ ${blockSuffix}` : suffix;
       // Even lighter - active button background
     }
   };
+  /**
+   * Available themes collection
+   */
   var themes = {
     solar,
     cave,
@@ -1289,6 +1550,11 @@ ${blockSuffix}` : suffix;
     light: solar,
     dark: cave
   };
+  /**
+   * Get theme configuration by name or return theme object
+   * @param {string|Object} theme - Theme name or theme object
+   * @returns {Object} Theme configuration object
+   */
   function getTheme(theme) {
     if (typeof theme === "string") {
       const themeObj = themes[theme] || themes.solar;
@@ -1296,6 +1562,11 @@ ${blockSuffix}` : suffix;
     }
     return theme;
   }
+  /**
+   * Convert theme colors to CSS custom properties
+   * @param {Object} colors - Theme colors object
+   * @returns {string} CSS custom properties string
+   */
   function themeToCSSVars(colors) {
     const vars = [];
     for (const [key, value] of Object.entries(colors)) {
@@ -1304,6 +1575,12 @@ ${blockSuffix}` : suffix;
     }
     return vars.join("\n");
   }
+  /**
+   * Merge base theme with custom colors
+   * @param {Object} baseTheme - Base theme object
+   * @param {Object} customColors - Custom color overrides
+   * @returns {Object} Merged theme object
+   */
   function mergeTheme(baseTheme, customColors = {}) {
     return {
       ...baseTheme,
@@ -1315,6 +1592,11 @@ ${blockSuffix}` : suffix;
   }
 
   // src/styles.js
+  /**
+   * Generate CSS styles for OverType editor
+   * @param {Object} options - Style generation options
+   * @returns {string} Generated CSS styles
+   */
   function generateStyles(options = {}) {
     const {
       fontSize = "14px",
@@ -1783,34 +2065,58 @@ ${blockSuffix}` : suffix;
   }
 
   // src/icons.js
+  /**
+   * Bold formatting icon SVG
+   */
   var boldIcon = `<svg viewBox="0 0 18 18">
   <path stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5,4H9.5A2.5,2.5,0,0,1,12,6.5v0A2.5,2.5,0,0,1,9.5,9H5A0,0,0,0,1,5,9V4A0,0,0,0,1,5,4Z"></path>
   <path stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5,9h5.5A2.5,2.5,0,0,1,13,11.5v0A2.5,2.5,0,0,1,10.5,14H5a0,0,0,0,1,0,0V9A0,0,0,0,1,5,9Z"></path>
 </svg>`;
+  /**
+   * Italic formatting icon SVG
+   */
   var italicIcon = `<svg viewBox="0 0 18 18">
   <line stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="7" x2="13" y1="4" y2="4"></line>
   <line stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="5" x2="11" y1="14" y2="14"></line>
   <line stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="8" x2="10" y1="14" y2="4"></line>
 </svg>`;
+  /**
+   * H1 header icon SVG
+   */
   var h1Icon = `<svg viewBox="0 0 18 18">
   <path fill="currentColor" d="M10,4V14a1,1,0,0,1-2,0V10H3v4a1,1,0,0,1-2,0V4A1,1,0,0,1,3,4V8H8V4a1,1,0,0,1,2,0Zm6.06787,9.209H14.98975V7.59863a.54085.54085,0,0,0-.605-.60547h-.62744a1.01119,1.01119,0,0,0-.748.29688L11.645,8.56641a.5435.5435,0,0,0-.022.8584l.28613.30762a.53861.53861,0,0,0,.84717.0332l.09912-.08789a1.2137,1.2137,0,0,0,.2417-.35254h.02246s-.01123.30859-.01123.60547V13.209H12.041a.54085.54085,0,0,0-.605.60547v.43945a.54085.54085,0,0,0,.605.60547h4.02686a.54085.54085,0,0,0,.605-.60547v-.43945A.54085.54085,0,0,0,16.06787,13.209Z"></path>
 </svg>`;
+  /**
+   * H2 header icon SVG
+   */
   var h2Icon = `<svg viewBox="0 0 18 18">
   <path fill="currentColor" d="M16.73975,13.81445v.43945a.54085.54085,0,0,1-.605.60547H11.855a.58392.58392,0,0,1-.64893-.60547V14.0127c0-2.90527,3.39941-3.42187,3.39941-4.55469a.77675.77675,0,0,0-.84717-.78125,1.17684,1.17684,0,0,0-.83594.38477c-.2749.26367-.561.374-.85791.13184l-.4292-.34082c-.30811-.24219-.38525-.51758-.1543-.81445a2.97155,2.97155,0,0,1,2.45361-1.17676,2.45393,2.45393,0,0,1,2.68408,2.40918c0,2.45312-3.1792,2.92676-3.27832,3.93848h2.79443A.54085.54085,0,0,1,16.73975,13.81445ZM9,3A.99974.99974,0,0,0,8,4V8H3V4A1,1,0,0,0,1,4V14a1,1,0,0,0,2,0V10H8v4a1,1,0,0,0,2,0V4A.99974.99974,0,0,0,9,3Z"></path>
 </svg>`;
+  /**
+   * H3 header icon SVG
+   */
   var h3Icon = `<svg viewBox="0 0 18 18">
   <path fill="currentColor" d="M16.65186,12.30664a2.6742,2.6742,0,0,1-2.915,2.68457,3.96592,3.96592,0,0,1-2.25537-.6709.56007.56007,0,0,1-.13232-.83594L11.64648,13c.209-.34082.48389-.36328.82471-.1543a2.32654,2.32654,0,0,0,1.12256.33008c.71484,0,1.12207-.35156,1.12207-.78125,0-.61523-.61621-.86816-1.46338-.86816H13.2085a.65159.65159,0,0,1-.68213-.41895l-.05518-.10937a.67114.67114,0,0,1,.14307-.78125l.71533-.86914a8.55289,8.55289,0,0,1,.68213-.7373V8.58887a3.93913,3.93913,0,0,1-.748.05469H11.9873a.54085.54085,0,0,1-.605-.60547V7.59863a.54085.54085,0,0,1,.605-.60547h3.75146a.53773.53773,0,0,1,.60547.59375v.17676a1.03723,1.03723,0,0,1-.27539.748L14.74854,10.0293A2.31132,2.31132,0,0,1,16.65186,12.30664ZM9,3A.99974.99974,0,0,0,8,4V8H3V4A1,1,0,0,0,1,4V14a1,1,0,0,0,2,0V10H8v4a1,1,0,0,0,2,0V4A.99974.99974,0,0,0,9,3Z"></path>
 </svg>`;
+  /**
+   * Link icon SVG
+   */
   var linkIcon = `<svg viewBox="0 0 18 18">
   <line stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="7" x2="11" y1="7" y2="11"></line>
   <path stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.9,4.577a3.476,3.476,0,0,1,.36,4.679A3.476,3.476,0,0,1,4.577,8.9C3.185,7.5,2.035,6.4,4.217,4.217S7.5,3.185,8.9,4.577Z"></path>
   <path stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.423,9.1a3.476,3.476,0,0,0-4.679-.36,3.476,3.476,0,0,0,.36,4.679c1.392,1.392,2.5,2.542,4.679.36S14.815,10.5,13.423,9.1Z"></path>
 </svg>`;
+  /**
+   * Code icon SVG
+   */
   var codeIcon = `<svg viewBox="0 0 18 18">
   <polyline stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" points="5 7 3 9 5 11"></polyline>
   <polyline stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" points="13 7 15 9 13 11"></polyline>
   <line stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="10" x2="8" y1="5" y2="13"></line>
 </svg>`;
+  /**
+   * Bullet list icon SVG
+   */
   var bulletListIcon = `<svg viewBox="0 0 18 18">
   <line stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="6" x2="15" y1="4" y2="4"></line>
   <line stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="6" x2="15" y1="9" y2="9"></line>
@@ -1819,6 +2125,9 @@ ${blockSuffix}` : suffix;
   <line stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="3" x2="3" y1="9" y2="9"></line>
   <line stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="3" x2="3" y1="14" y2="14"></line>
 </svg>`;
+  /**
+   * Ordered list icon SVG
+   */
   var orderedListIcon = `<svg viewBox="0 0 18 18">
   <line stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="7" x2="15" y1="4" y2="4"></line>
   <line stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="7" x2="15" y1="9" y2="9"></line>
@@ -1828,10 +2137,16 @@ ${blockSuffix}` : suffix;
   <path stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4.5,10.5h-2c0-.234,1.85-1.076,1.85-2.234A0.959,0.959,0,0,0,2.5,8.156"></path>
   <path stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M2.5,14.846a0.959,0.959,0,0,0,1.85-.109A0.7,0.7,0,0,0,3.75,14a0.688,0.688,0,0,0,.6-0.736,0.959,0.959,0,0,0-1.85-.109"></path>
 </svg>`;
+  /**
+   * Quote icon SVG
+   */
   var quoteIcon = `<svg viewBox="2 2 20 20">
   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 10.8182L9 10.8182C8.80222 10.8182 8.60888 10.7649 8.44443 10.665C8.27998 10.5651 8.15181 10.4231 8.07612 10.257C8.00043 10.0909 7.98063 9.90808 8.01922 9.73174C8.0578 9.55539 8.15304 9.39341 8.29289 9.26627C8.43275 9.13913 8.61093 9.05255 8.80491 9.01747C8.99889 8.98239 9.19996 9.00039 9.38268 9.0692C9.56541 9.13801 9.72159 9.25453 9.83147 9.40403C9.94135 9.55353 10 9.72929 10 9.90909L10 12.1818C10 12.664 9.78929 13.1265 9.41421 13.4675C9.03914 13.8084 8.53043 14 8 14"></path>
   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 10.8182L15 10.8182C14.8022 10.8182 14.6089 10.7649 14.4444 10.665C14.28 10.5651 14.1518 10.4231 14.0761 10.257C14.0004 10.0909 13.9806 9.90808 14.0192 9.73174C14.0578 9.55539 14.153 9.39341 14.2929 9.26627C14.4327 9.13913 14.6109 9.05255 14.8049 9.01747C14.9989 8.98239 15.2 9.00039 15.3827 9.0692C15.5654 9.13801 15.7216 9.25453 15.8315 9.40403C15.9414 9.55353 16 9.72929 16 9.90909L16 12.1818C16 12.664 15.7893 13.1265 15.4142 13.4675C15.0391 13.8084 14.5304 14 14 14"></path>
 </svg>`;
+  /**
+   * Task list icon SVG
+   */
   var taskListIcon = `<svg viewBox="0 0 18 18">
   <line stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="8" x2="16" y1="4" y2="4"></line>
   <line stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" x1="8" x2="16" y1="9" y2="9"></line>
@@ -1842,7 +2157,14 @@ ${blockSuffix}` : suffix;
 </svg>`;
 
   // src/toolbar.js
+  /**
+   * Toolbar component for markdown formatting actions
+   */
   var Toolbar = class {
+    /**
+     * Create toolbar instance
+     * @param {Object} editor - OverType editor instance
+     */
     constructor(editor) {
       this.editor = editor;
       this.container = null;
@@ -1850,6 +2172,7 @@ ${blockSuffix}` : suffix;
     }
     /**
      * Create and attach toolbar to editor
+     * @returns {HTMLElement} The created toolbar container
      */
     create() {
       this.container = document.createElement("div");
@@ -1894,6 +2217,8 @@ ${blockSuffix}` : suffix;
     }
     /**
      * Create individual toolbar button
+     * @param {Object} config - Button configuration
+     * @returns {HTMLButtonElement} Created button element
      */
     createButton(config) {
       const button = document.createElement("button");
@@ -1911,6 +2236,8 @@ ${blockSuffix}` : suffix;
     }
     /**
      * Handle toolbar button actions
+     * @param {string} action - Action name to execute
+     * @returns {Promise<void>}
      */
     async handleAction(action) {
       const textarea = this.editor.textarea;
@@ -1960,6 +2287,7 @@ ${blockSuffix}` : suffix;
     }
     /**
      * Update toolbar button states based on current selection
+     * @returns {Promise<void>}
      */
     async updateButtonStates() {
       const textarea = this.editor.textarea;
@@ -2008,7 +2336,7 @@ ${blockSuffix}` : suffix;
       }
     }
     /**
-     * Destroy toolbar
+     * Destroy toolbar and clean up resources
      */
     destroy() {
       if (this.container) {
@@ -2020,7 +2348,14 @@ ${blockSuffix}` : suffix;
   };
 
   // src/link-tooltip.js
+  /**
+   * Link tooltip component for displaying link URLs on hover
+   */
   var LinkTooltip = class {
+    /**
+     * Create link tooltip instance
+     * @param {Object} editor - OverType editor instance
+     */
     constructor(editor) {
       this.editor = editor;
       this.tooltip = null;
@@ -2028,6 +2363,10 @@ ${blockSuffix}` : suffix;
       this.hideTimeout = null;
       this.init();
     }
+    /**
+     * Initialize tooltip functionality
+     * @returns {void}
+     */
     init() {
       const supportsAnchor = CSS.supports("position-anchor: --x") && CSS.supports("position-area: center");
       if (!supportsAnchor) {
@@ -2045,6 +2384,9 @@ ${blockSuffix}` : suffix;
       this.tooltip.addEventListener("mouseenter", () => this.cancelHide());
       this.tooltip.addEventListener("mouseleave", () => this.scheduleHide());
     }
+    /**
+     * Create tooltip DOM element and styles
+     */
     createTooltip() {
       this.tooltip = document.createElement("div");
       this.tooltip.className = "overtype-link-tooltip";
@@ -2101,6 +2443,9 @@ ${blockSuffix}` : suffix;
       });
       this.editor.container.appendChild(this.tooltip);
     }
+    /**
+     * Check cursor position for link detection
+     */
     checkCursorPosition() {
       const cursorPos = this.editor.textarea.selectionStart;
       const text = this.editor.textarea.value;
@@ -2113,6 +2458,12 @@ ${blockSuffix}` : suffix;
         this.scheduleHide();
       }
     }
+    /**
+     * Find link at given text position
+     * @param {string} text - Text to search in
+     * @param {number} position - Cursor position
+     * @returns {Object|null} Link information or null
+     */
     findLinkAtPosition(text, position) {
       const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
       let match;
@@ -2133,6 +2484,10 @@ ${blockSuffix}` : suffix;
       }
       return null;
     }
+    /**
+     * Show tooltip with link information
+     * @param {Object} linkInfo - Link information object
+     */
     show(linkInfo) {
       this.currentLink = linkInfo;
       this.cancelHide();
@@ -2141,20 +2496,32 @@ ${blockSuffix}` : suffix;
       this.tooltip.style.setProperty("--target-anchor", `--link-${linkInfo.index}`);
       this.tooltip.classList.add("visible");
     }
+    /**
+     * Hide tooltip
+     */
     hide() {
       this.tooltip.classList.remove("visible");
       this.currentLink = null;
     }
+    /**
+     * Schedule tooltip hide with delay
+     */
     scheduleHide() {
       this.cancelHide();
       this.hideTimeout = setTimeout(() => this.hide(), 300);
     }
+    /**
+     * Cancel scheduled hide
+     */
     cancelHide() {
       if (this.hideTimeout) {
         clearTimeout(this.hideTimeout);
         this.hideTimeout = null;
       }
     }
+    /**
+     * Destroy tooltip and clean up resources
+     */
     destroy() {
       this.cancelHide();
       if (this.tooltip && this.tooltip.parentNode) {
@@ -2166,12 +2533,16 @@ ${blockSuffix}` : suffix;
   };
 
   // src/overtype.js
+  /**
+   * OverType markdown editor class
+   */
   var _OverType = class _OverType {
     /**
      * Constructor - Always returns an array of instances
      * @param {string|Element|NodeList|Array} target - Target element(s)
      * @param {Object} options - Configuration options
      * @returns {Array} Array of OverType instances
+     * @throws {Error} When no elements found for selector or invalid target type
      */
     constructor(target, options = {}) {
       let elements;
@@ -2205,6 +2576,8 @@ ${blockSuffix}` : suffix;
     }
     /**
      * Internal initialization
+     * @param {Element} element - Target DOM element
+     * @param {Object} options - Configuration options
      * @private
      */
     _init(element, options = {}) {
@@ -2241,6 +2614,8 @@ ${blockSuffix}` : suffix;
     }
     /**
      * Merge user options with defaults
+     * @param {Object} options - User options
+     * @returns {Object} Merged options
      * @private
      */
     _mergeOptions(options) {
@@ -2286,7 +2661,10 @@ ${blockSuffix}` : suffix;
     }
     /**
      * Recover from existing DOM structure
+     * @param {Element} container - Existing container element
+     * @param {Element} wrapper - Existing wrapper element
      * @private
+     * @returns {void}
      */
     _recoverFromDOM(container, wrapper) {
       if (container && container.classList.contains("overtype-container")) {
@@ -2354,6 +2732,7 @@ ${blockSuffix}` : suffix;
     }
     /**
      * Extract content from element
+     * @returns {string} Extracted content
      * @private
      */
     _extractContent() {
@@ -2518,6 +2897,9 @@ ${blockSuffix}` : suffix;
     }
     /**
      * Get current line number from cursor position
+     * @param {string} text - Text content
+     * @param {number} cursorPos - Cursor position
+     * @returns {number} Current line number
      * @private
      */
     _getCurrentLine(text, cursorPos) {
@@ -2526,6 +2908,7 @@ ${blockSuffix}` : suffix;
     }
     /**
      * Handle input events
+     * @param {Event} event - Input event
      * @private
      */
     handleInput(event) {
@@ -2533,7 +2916,9 @@ ${blockSuffix}` : suffix;
     }
     /**
      * Handle keydown events
+     * @param {KeyboardEvent} event - Keydown event
      * @private
+     * @returns {void}
      */
     handleKeydown(event) {
       if (event.key === "Tab") {
@@ -2573,6 +2958,7 @@ ${blockSuffix}` : suffix;
     }
     /**
      * Handle scroll events
+     * @param {Event} event - Scroll event
      * @private
      */
     handleScroll(event) {
@@ -2611,7 +2997,7 @@ ${blockSuffix}` : suffix;
     }
     /**
      * Check if editor is initialized
-     * @returns {boolean}
+     * @returns {boolean} True if initialized
      */
     isInitialized() {
       return this.initialized;
@@ -2628,6 +3014,7 @@ ${blockSuffix}` : suffix;
     /**
      * Update stats bar
      * @private
+     * @returns {void}
      */
     _updateStats() {
       if (!this.statsBar)
@@ -2673,6 +3060,7 @@ ${blockSuffix}` : suffix;
     /**
      * Update height based on scrollHeight
      * @private
+     * @returns {void}
      */
     _updateAutoHeight() {
       if (!this.options.autoResize)
@@ -2775,6 +3163,7 @@ ${blockSuffix}` : suffix;
     /**
      * Inject styles into the document
      * @param {boolean} force - Force re-injection
+     * @returns {void}
      */
     static injectStyles(force = false) {
       if (_OverType.stylesInjected && !force)
@@ -2824,6 +3213,7 @@ ${blockSuffix}` : suffix;
     }
     /**
      * Initialize global event listeners
+     * @returns {void}
      */
     static initGlobalListeners() {
       if (_OverType.globalListenersInitialized)
