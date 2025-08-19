@@ -9,6 +9,10 @@ import * as markdownActions from 'markdown-actions';
  * ShortcutsManager - Handles keyboard shortcuts for the editor
  */
 export class ShortcutsManager {
+  /**
+   * Creates a new ShortcutsManager instance
+   * @param {Object} editor - The editor instance containing textarea and optional toolbar
+   */
   constructor(editor) {
     this.editor = editor;
     this.textarea = editor.textarea;
@@ -17,8 +21,9 @@ export class ShortcutsManager {
 
   /**
    * Handle keydown events - called by OverType
-   * @param {KeyboardEvent} event - The keyboard event
-   * @returns {boolean} Whether the event was handled
+   * Processes keyboard shortcuts and maps them to markdown actions
+   * @param {KeyboardEvent} event - The keyboard event to process
+   * @returns {boolean} True if the event was handled and should be prevented, false otherwise
    */
   handleKeydown(event) {
     const isMac = navigator.platform.toLowerCase().includes('mac');
@@ -82,6 +87,9 @@ export class ShortcutsManager {
   /**
    * Handle action - fallback when no toolbar exists
    * This duplicates toolbar.handleAction for consistency
+   * Executes markdown actions and triggers input events for preview updates
+   * @param {string} action - The action name to execute (toggleBold, toggleItalic, etc.)
+   * @returns {Promise<void>} Promise that resolves when the action is complete
    */
   async handleAction(action) {
     const textarea = this.textarea;
@@ -117,7 +125,8 @@ export class ShortcutsManager {
   }
 
   /**
-   * Cleanup
+   * Cleanup resources and remove event listeners
+   * Currently no cleanup needed as no listeners are added directly
    */
   destroy() {
     // Nothing to clean up since we don't add our own listener
