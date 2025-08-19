@@ -5,6 +5,10 @@
  */
 
 export class LinkTooltip {
+  /**
+   * Creates a new LinkTooltip instance
+   * @param {Object} editor - The editor instance containing textarea and container elements
+   */
   constructor(editor) {
     this.editor = editor;
     this.tooltip = null;
@@ -14,6 +18,9 @@ export class LinkTooltip {
     this.init();
   }
   
+  /**
+   * Initializes the tooltip functionality by checking browser support and setting up event listeners
+   */
   init() {
     // Check for CSS anchor positioning support
     const supportsAnchor = 
@@ -45,6 +52,9 @@ export class LinkTooltip {
     this.tooltip.addEventListener('mouseleave', () => this.scheduleHide());
   }
   
+  /**
+   * Creates the tooltip DOM element with styling and event handlers
+   */
   createTooltip() {
     // Create tooltip element
     this.tooltip = document.createElement('div');
@@ -111,6 +121,9 @@ export class LinkTooltip {
     this.editor.container.appendChild(this.tooltip);
   }
   
+  /**
+   * Checks the current cursor position and shows/hides tooltip based on whether cursor is within a link
+   */
   checkCursorPosition() {
     const cursorPos = this.editor.textarea.selectionStart;
     const text = this.editor.textarea.value;
@@ -127,6 +140,12 @@ export class LinkTooltip {
     }
   }
   
+  /**
+   * Finds markdown link at the specified position in the text
+   * @param {string} text - The text content to search within
+   * @param {number} position - The cursor position to check
+   * @returns {Object|null} Link information object with text, url, index, start, and end properties, or null if no link found
+   */
   findLinkAtPosition(text, position) {
     // Regex to find markdown links: [text](url)
     const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
@@ -152,6 +171,10 @@ export class LinkTooltip {
     return null;
   }
   
+  /**
+   * Shows the tooltip with the provided link information
+   * @param {Object} linkInfo - Link information object containing url, index, and other properties
+   */
   show(linkInfo) {
     this.currentLink = linkInfo;
     this.cancelHide();
@@ -167,16 +190,25 @@ export class LinkTooltip {
     this.tooltip.classList.add('visible');
   }
   
+  /**
+   * Hides the tooltip immediately
+   */
   hide() {
     this.tooltip.classList.remove('visible');
     this.currentLink = null;
   }
   
+  /**
+   * Schedules the tooltip to be hidden after a delay
+   */
   scheduleHide() {
     this.cancelHide();
     this.hideTimeout = setTimeout(() => this.hide(), 300);
   }
   
+  /**
+   * Cancels any scheduled hide operation
+   */
   cancelHide() {
     if (this.hideTimeout) {
       clearTimeout(this.hideTimeout);
@@ -184,6 +216,9 @@ export class LinkTooltip {
     }
   }
   
+  /**
+   * Destroys the tooltip instance and cleans up resources
+   */
   destroy() {
     this.cancelHide();
     if (this.tooltip && this.tooltip.parentNode) {
